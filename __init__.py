@@ -8,7 +8,7 @@ ROOT_WINDOW_WIDTH = 400
 
 # função executada ao selecionar a opção "File > Open Image"
 def onOpenImage():
-    imagePath = filedialog.askopenfilename(initialdir = "/",title = "Open file",filetypes = (("Img files",".png"),("Img files",".jpg")))
+    imagePath = filedialog.askopenfilename(initialdir = "./tests",title = "Open file",filetypes = (("Img files",".png"),("Img files",".jpg")))
     printImage(imagePath)
 
 # função responsável pela exibição da imagem carregada na janela do programa.
@@ -22,30 +22,29 @@ def printImage(imagePath):
         oriImage = image.copy()
 
 def onSaveImage():
-    filename_save = filedialog.asksaveasfilename(initialdir = "/",title = "Save as",filetypes = (("Img files",".png"),("Img files",".jpg")))
+    filename_save = filedialog.asksaveasfilename(initialdir = "./tests",title = "Save as",filetypes = (("Img files",".png"),("Img files",".jpg")))
 
-def main():
-    root_window = tk.Tk()
+def closeWindow():
+    root.destroy()
 
-    root_window.geometry("{}x{}".format(ROOT_WINDOW_HEIGHT,ROOT_WINDOW_WIDTH))
-    root_window.title("Diagnosis of femorotibial osteoarthritis")
+root = tk.Tk()
 
-    menubar = tk.Menu(root_window)
+root.geometry("{}x{}".format(ROOT_WINDOW_HEIGHT,ROOT_WINDOW_WIDTH))
+root.title("Diagnosis of femorotibial osteoarthritis")
 
-    # Opções do menu superior
-    filemenu = tk.Menu(menubar, tearoff = 0)
-    filemenu.add_command(label = "Open Image", command=onOpenImage)
-    filemenu.add_command(label = "Save", command=onSaveImage)
-    filemenu.add_command(label = "Exit")
+menubar = tk.Menu(root)
 
-    menubar.add_cascade(label = "File", menu=filemenu)
+# Opções do menu superior
+filemenu = tk.Menu(menubar, tearoff = 0)
+filemenu.add_command(label = "Open image ...", command=onOpenImage)
+filemenu.add_command(label = "Save", command=onSaveImage)
+filemenu.add_command(label = "Exit", command=closeWindow)
 
-    root_window.config(menu=menubar)
+menubar.add_cascade(label = "File", menu=filemenu)
 
-    imagebox = tk.Label(root_window)
-    imagebox.pack()
+root.config(menu=menubar)
 
-    root_window.mainloop()
+imagebox = tk.Label(root)
+imagebox.pack()
 
-if __name__ == "__main__":
-    main()
+root.mainloop()
