@@ -3,8 +3,8 @@ from tkinter import filedialog
 from PIL import ImageTk
 import cv2
 
-ROOT_SCREEN_WIDTH = 400
-ROOT_SCREEN_HEIGHT = 500
+ROOT_WINDOW_HEIGHT = 500
+ROOT_WINDOW_WIDTH = 400
 
 # função executada ao selecionar a opção "File > Open Image"
 def onOpenImage():
@@ -27,7 +27,7 @@ def onSaveImage():
 def main():
     root_window = tk.Tk()
 
-    root_window.geometry("{}x{}".format(ROOT_SCREEN_HEIGHT,ROOT_SCREEN_WIDTH))
+    root_window.geometry("{}x{}".format(ROOT_WINDOW_HEIGHT,ROOT_WINDOW_WIDTH))
     root_window.title("Diagnosis of femorotibial osteoarthritis")
 
     menubar = tk.Menu(root_window)
