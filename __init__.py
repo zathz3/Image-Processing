@@ -20,6 +20,10 @@ def printImage(imagePath):
 
         image = cv2.imread(imagePath)
         oriImage = image.copy()
+        menubar.entryconfig("Crop", state="active")
+
+# def cropImage():
+
 
 def onSaveImage():
     filename_save = filedialog.asksaveasfilename(initialdir = "./tests",title = "Save as",filetypes = (("Img files",".png"),("Img files",".jpg")))
@@ -41,6 +45,7 @@ filemenu.add_command(label = "Save", command=onSaveImage)
 filemenu.add_command(label = "Exit", command=closeWindow)
 
 menubar.add_cascade(label = "File", menu=filemenu)
+menubar.add_command(label = "Crop", state= "disabled", command=closeWindow)
 
 root.config(menu=menubar)
 
