@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from turtle import width
 from PIL import ImageTk
 from PIL import Image
 import cv2
@@ -47,20 +48,44 @@ def printImage(imagePath):
         oriImage = LOADED_IMG.copy()
         menubar.entryconfig("Crop", state="active")
 
-
-def printCrop(cropPath):
-    if (len(imagePath) > 0):
-        global LOADED_IMG, CROP_IMG
-
-
 def onOpenCrop():
-    cropPath = filedialog.askopenfilename(initialdir="./crops", title="Open file",
-                                           filetypes=(("Img files", ".png"), ("Img files", ".jpg")))
+    cropPath = filedialog.askopenfilename(initialdir = "./crops",title = "Open file",filetypes = (("Img files",".png"),("Img files",".jpg")))
     imgcrop = cv2.imread(cropPath)
     cv2.namedWindow("crop")
     cv2.imshow("crop", imgcrop)
     cv2.waitKey(5)
-    cv2.destroyWindow("crop")
+
+    try:
+        res = cv2.matchTemplate(LOADED_IMG,imgcrop,cv2.TM_CCOEFF_NORMED)
+        threshold = 0.99
+        loc = np.where (res >= threshold)
+        x_coordinate = list(loc[0])
+        y_coordinate = list(loc[1])
+
+        height = imgcrop.shape[0]
+        width = imgcrop.shape[1]
+
+        xstart = x_coordinate[0]
+        ystart = y_coordinate[0]
+
+        xend = xstart + width
+        yend = ystart + height
+
+        print(xstart,ystart,xend,yend)
+
+        i = LOADED_IMG.copy()
+
+        cv2.namedWindow("image2")
+        cv2.imshow("image2", i)
+        cv2.rectangle(i, (xstart, ystart), (xend, yend), (255, 0, 0), 2)
+        cv2.imshow("image2", i)
+        cv2.waitKey(5)
+    except:
+        cv2.destroyWindow("crop")
+        print("Padrão não encontrado!\n")
+
+
+    
 
 
 # Funcao para detectar os movimentos do mouse e realizar o crop
@@ -85,36 +110,6 @@ def mouse_crop(event, x, y, flags, param):
             crop_name = "crops/" + img_name
             cv2.imwrite(crop_name,roi)
             cropped = True
-            res = cv2.matchTemplate(LOADED_IMG,roi,cv2.TM_CCOEFF_NORMED)
-            threshold = 0.99
-            loc = np.where (res >= threshold)
-            x_coordinate = list(loc[0])
-            y_coordinate = list(loc[1])
-
-            im = Image.open(crop_name)
-            width, height = im.size
-            xstart = x_coordinate[0]
-            ystart = y_coordinate[0]
-
-            xend = xstart + width
-            yend = ystart + height
-
-            print(xstart,ystart,xend,yend)
-
-            i = LOADED_IMG.copy()
-
-            cv2.namedWindow("image2")
-            cv2.imshow("image2", i)
-            cv2.rectangle(i, (xstart, ystart), (xend, yend), (255, 0, 0), 2)
-            cv2.imshow("image2", i)
-            cv2.waitKey(5)
-            cv2.destroyWindow("image2")
-
-
-
-
-
-
 
 def crop():
     global cropped, img
